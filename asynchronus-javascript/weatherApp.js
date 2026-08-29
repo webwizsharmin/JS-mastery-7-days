@@ -2,10 +2,9 @@
 const apiKey = "YOUR_API_KEY_HERE";
 const city = "London";
 
-// Construct the endpoint URL
-const url = `https://openweathermap.org{city}&appid=${apiKey}&units=metric`;
-
 async function fetchWeather() {
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
   try {
     // 1. Send the network request
     const response = await fetch(url);
@@ -17,6 +16,10 @@ async function fetchWeather() {
 
     // 3. Parse the incoming stream into a readable JSON object
     const data = await response.json();
+
+    if (data.cod !== 200) {
+      throw new Error(`API error: ${data.message}`);
+    }
 
     // 4.Extract and display specific weather parameters
     console.log(`city: ${data.name}`);
